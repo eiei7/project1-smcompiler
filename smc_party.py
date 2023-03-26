@@ -47,6 +47,8 @@ class SMCParty:
 
     SHARE_PUBLISH_PREFIX = "send_share_from_"
     SHARE_COMPUTATION_RESULT_PREFIX = "computation_result_share_from_"
+    SHARE_TRIPLET_A_PREFIX = "send_[x - a]_from_"
+    SHARE_TRIPLET_B_PREFIX = "send_[y - b]_from_"
 
     def __init__(
             self,
@@ -134,7 +136,37 @@ class SMCParty:
                     return pre_expr_share * next_expr_share
 
                 # case2: Multiplication using the Beaver triplet protocol
-
+                a_share, b_share, c_share = self.comm.retrieve_beaver_triplet_shares(str(expr.id))
+                # [x - a]   [x] = pre_expr_share
+                pre_expr_share_a = pre_expr_share - a_share
+                # [y - b]   [y] = next_expr_share
+                next_expr_share_b = next_expr_share - b_share
+                # broadcast [x - a] and [y - b]
+                self.comm.publish_message(self.SHARE_TRIPLET_A_PREFIX + str(expr.id), pickle.dumps(pre_expr_share_a))
+                self.comm.publish_message(self.SHARE_TRIPLET_B_PREFIX + str(expr.id), pickle.dumps(next_expr_share_b))
+                # retrieve [x - a] and [y - b] from other parties
+                pre_expr_share_list = [pre_expr_share_a]
+                next_expr_share_list = [next_expr_share_b]
+                for ids in self.protocol_spec.participant_ids:
+                    if ids != self.client_id:
+                        pre_expr_share_list.append(
+                            pickle.loads(
+                                self.comm.retrieve_public_message(ids, self.SHARE_TRIPLET_A_PREFIX + str(expr.id))
+                            )
+                        )
+                        next_expr_share_list.append(
+                            pickle.loads(
+                                self.comm.retrieve_public_message(ids, self.SHARE_TRIPLET_B_PREFIX + str(expr.id))
+                            )
+                        )
+                # reconstruct (x - a) and (y - b)
+                x_a = sum(pre_expr_share_list, start=Share(0))
+                y_b = sum(next_expr_share_list, start=Share(0))
+                z = c_share + pre_expr_share * y_b + next_expr_share * x_a
+                # only the captain calculate the term -(x-a)(y-b)
+                if self.is_captain():
+                    z = z - x_a * y_b
+                return z
 
 
 

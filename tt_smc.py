@@ -3,8 +3,8 @@ from test_integration import suite
 
 def main():
     """
-    f(a, b, c) = a + b + c
-    """
+        f(a, b, c) = (a ∗ b) + (b ∗ c) + (c ∗ a)
+        """
     alice_secret = Secret()
     bob_secret = Secret()
     charlie_secret = Secret()
@@ -15,8 +15,12 @@ def main():
         "Charlie": {charlie_secret: 2}
     }
 
-    expr = (alice_secret + bob_secret + charlie_secret)
-    expected = 3 + 14 + 2
+    expr = (
+            (alice_secret * bob_secret) +
+            (bob_secret * charlie_secret) +
+            (charlie_secret * alice_secret)
+    )
+    expected = ((3 * 14) + (14 * 2) + (2 * 3))
     suite(parties, expr, expected)
 
 if __name__ == '__main__':

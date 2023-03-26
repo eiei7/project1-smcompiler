@@ -41,12 +41,12 @@ class Share:
 
     def serialize(self):
         """Generate a representation suitable for passing in a message."""
-        raise NotImplementedError("You need to implement this method.")
+        return str(self.val)
 
     @staticmethod
     def deserialize(serialized) -> Share:
         """Restore object from its serialized representation."""
-        raise NotImplementedError("You need to implement this method.")
+        return Share(int(serialized))
 
 
 def share_secret(secret: int, num_shares: int) -> List[Share]:
