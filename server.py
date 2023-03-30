@@ -9,12 +9,16 @@ from typing import Dict, List, Optional, Tuple
 
 from flask import Flask, request, Response, jsonify
 
+from shared_counter import SharedCounter
 from ttp import TrustedParamGenerator
 
 
 app: Flask = Flask("Trusted Third Party Server")
 store: Dict[str, Dict[Tuple[str, str], bytes]] = collections.defaultdict(dict)
 ttp: TrustedParamGenerator = TrustedParamGenerator()
+
+request_counter = SharedCounter()
+response_counter = SharedCounter()
 
 
 @app.route("/private/<sender_id>/<receiver_id>/<label>", methods=["POST"])
@@ -66,6 +70,17 @@ def retrieve_public_message(receiver_id: str, sender_id: str, label: str):
     return Response(status=404)
 
 
+@app.route("/count/bytes/<comm_type>", methods=["GET"])
+def retrieve_comm_cost_bytes_num(comm_type: str):
+    if comm_type == 'request':
+        target_counter = request_counter
+    elif comm_type == 'response':
+        target_counter = response_counter
+    else:
+        raise TypeError("Type error: only for request and response!")
+    return str(target_counter.value), 200
+
+
 @app.route("/shares/<client_id>/<op_id>", methods=["GET"])
 def retrieve_share(client_id: str, op_id: str):
     """
@@ -81,6 +96,9 @@ def _set_value(pool: str, channel: Tuple[str, str], data: bytes) -> None:
     """
     store[pool][channel] = data
 
+    # record the length of pushed data
+    request_counter.increment(len(data))
+
 
 def _get_value(pool: str, channel: Tuple[str, str]) -> Optional[bytes]:
     """
@@ -88,6 +106,10 @@ def _get_value(pool: str, channel: Tuple[str, str]) -> Optional[bytes]:
     """
     if channel not in store[pool]:
         return None
+
+    # record the length of requested data
+    response_counter.increment(len(store[pool][channel]))
+
     return store[pool][channel]
 
 

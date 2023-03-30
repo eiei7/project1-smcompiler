@@ -1,0 +1,17 @@
+group-1: 加法操作通信成本随party数量曲线
+	Addition: 50
+	Party: 5 10 15 20 25 30
+
+group-2  乘法操作通信成本随party数量曲线
+	Mul: 10
+	Party: 5 10 15 20 25 30
+
+group-3 加法操作通信成随操作数曲线
+	Addition: 10 50 100 200 500
+	Party: 5
+
+gruop-4 乘法操作通信成本随操作数
+	Mul: 2 4 8 16 32
+	Party: 3
+
+group-5 加法操作

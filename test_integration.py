@@ -21,7 +21,7 @@ def smc_client(client_id, prot, value_dict, queue):
     cli = SMCParty(
         client_id,
         "localhost",
-        8000,
+        5000,
         protocol_spec=prot,
         value_dict=value_dict
     )
@@ -31,7 +31,7 @@ def smc_client(client_id, prot, value_dict, queue):
 
 
 def smc_server(args):
-    run("localhost", 8000, args)
+    run("localhost", 5000, args)
 
 
 def run_processes(server_args, *client_args):
