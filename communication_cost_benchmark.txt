@@ -1,0 +1,113 @@
+party_5_op_50_type_add:
+   Comm_request_cost: 1428 bytes
+   Comm_response_cost: 2298 bytes
+party_10_op_50_type_add:
+   Comm_request_cost: 5706 bytes
+   Comm_response_cost: 10346 bytes
+party_15_op_50_type_add:
+   Comm_request_cost: 12834 bytes
+   Comm_response_cost: 24144 bytes
+party_20_op_50_type_add:
+   Comm_request_cost: 22814 bytes
+   Comm_response_cost: 43694 bytes
+party_25_op_50_type_add:
+   Comm_request_cost: 35636 bytes
+   Comm_response_cost: 68986 bytes
+party_30_op_50_type_add:
+   Comm_request_cost: 51290 bytes
+   Comm_response_cost: 100010 bytes
+   ------------------------------------
+
+party_5_op_10_type_mul:
+   Comm_request_cost: 6556 bytes
+   Comm_response_cost: 22804 bytes
+party_10_op_10_type_mul:
+   Comm_request_cost: 15962 bytes
+   Comm_response_cost: 102121 bytes
+party_15_op_10_type_mul:
+   Comm_request_cost: 28208 bytes
+   Comm_response_cost: 234700 bytes
+party_20_op_10_type_mul:
+   Comm_request_cost: 43320 bytes
+   Comm_response_cost: 421549 bytes
+party_25_op_10_type_mul:
+   Comm_request_cost: 61262 bytes
+   Comm_response_cost: 662274 bytes
+party_30_op_10_type_mul:
+   Comm_request_cost: 82058 bytes
+   Comm_response_cost: 957541 bytes
+   -------------------------------------
+
+party_5_op_10_type_add:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_5_op_50_type_add:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_5_op_100_type_add:
+   Comm_request_cost: 1426 bytes
+   Comm_response_cost: 2290 bytes
+party_5_op_200_type_add:
+   Comm_request_cost: 1428 bytes
+   Comm_response_cost: 2298 bytes
+party_5_op_300_type_add:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+   -------------------------------
+
+party_5_op_50_type_add_scalar_5:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_5_op_50_type_add_scalar_10:
+   Comm_request_cost: 1428 bytes
+   Comm_response_cost: 2298 bytes
+party_5_op_50_type_add_scalar_50:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_5_op_50_type_add_scalar_100:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_5_op_50_type_add_scalar_200:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+    ---------------------------------
+
+party_3_op_2_type_mul:
+   Comm_request_cost: 858 bytes
+   Comm_response_cost: 1146 bytes
+party_3_op_4_type_mul:
+   Comm_request_cost: 1542 bytes
+   Comm_response_cost: 2742 bytes
+party_3_op_8_type_mul:
+   Comm_request_cost: 2910 bytes
+   Comm_response_cost: 5478 bytes
+party_3_op_16_type_mul:
+   Comm_request_cost: 5642 bytes
+   Comm_response_cost: 10942 bytes
+
+   ------------------------------------
+
+party_3_op_5_type_mul_scalar_1:
+   Comm_request_cost: 1884 bytes
+   Comm_response_cost: 3426 bytes
+party_3_op_5_type_mul_scalar_3:
+   Comm_request_cost: 1882 bytes
+   Comm_response_cost: 3422 bytes
+party_3_op_5_type_mul_scalar_5:
+   Comm_request_cost: 1882 bytes
+   Comm_response_cost: 3422 bytes
+party_3_op_5_type_mul_scalar_7:
+   Comm_request_cost: 1880 bytes
+   Comm_response_cost: 3418 bytes
+party_5_op_100_type_add:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_5_op_10_type_mul:
+   Comm_request_cost: 6556 bytes
+   Comm_response_cost: 22810 bytes
+party_5_op_50_type_add_scalar_100:
+   Comm_request_cost: 1430 bytes
+   Comm_response_cost: 2300 bytes
+party_3_op_5_type_mul_scalar_3:
+   Comm_request_cost: 1884 bytes
+   Comm_response_cost: 3426 bytes
