@@ -76,7 +76,7 @@ class Scalar(Expression):
 
     def __mul__(self, other):
         if isinstance(other, Scalar):
-            return Scalar((self.value * other.value) % Share.F_P)
+            return Scalar((self.value * other.value) % Share.F_p)
         return super().__mul__(other)
 
     def __hash__(self):

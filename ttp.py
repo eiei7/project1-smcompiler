@@ -5,8 +5,6 @@ MODIFY THIS FILE.
 """
 
 import collections
-import math
-import random
 from typing import (
     Dict,
     Set,
@@ -19,11 +17,10 @@ from secret_sharing import(
     Share,
 )
 
+import math
+import random
+
 # Feel free to add as many imports as you want.
-
-
-def get_share(triplet: Tuple, index: int) -> Tuple:
-    return triplet[0][index], triplet[1][index], triplet[2][index]
 
 
 class TrustedParamGenerator:
@@ -32,11 +29,12 @@ class TrustedParamGenerator:
     """
 
     def __init__(self):
+
         self.participant_ids: Set[str] = set()
-        # (key) participant_id: (value) index
-        self.participant_dict = dict()
-        # (key) op_id: (value) triplet
-        self.triplet_dict = dict()
+
+        self.triplets: Dict[str, Tuple[Share, Share, Share]] = {}
+        
+        self.participant_ids_to_index: Dict[str, int] = {} # index:=order
 
 
     def add_participant(self, participant_id: str) -> None:
@@ -44,28 +42,34 @@ class TrustedParamGenerator:
         Add a participant.
         """
         self.participant_ids.add(participant_id)
-        index = len(self.participant_dict)
-        self.participant_dict[participant_id] = index
+        
+        self.participant_ids_to_index[participant_id] = len(self.participant_ids_to_index)
+
 
     def retrieve_share(self, client_id: str, op_id: str) -> Tuple[Share, Share, Share]:
         """
         Retrieve a triplet of shares for a given client_id.
         """
-        index = self.participant_dict[client_id]
-        if op_id in self.triplet_dict:
-            return get_share(self.triplet_dict[op_id], index)
+        if client_id not in self.participant_ids:
+            raise ValueError(f"{client_id} is not registered.")
+        
+        idx = self.participant_ids_to_index[client_id]
+        
+        if op_id in self.triplets:
+            a_share, b_share, c_share = self.triplets[op_id]
 
-        # generate the a, b, c
-        a, b = random.sample(range(0, int(math.floor(math.sqrt(Share.F_P)))), 2)
+            return a_share[idx], b_share[idx], c_share[idx]
+        
+        a, b = random.sample(range(0, int(math.floor(math.sqrt(Share.F_p)))), 2)
         c = a * b
-        # generate shares of a, b, c for each party
-        a_share = share_secret(a, len(self.participant_ids))
-        b_share = share_secret(b, len(self.participant_ids))
-        c_share = share_secret(c, len(self.participant_ids))
-        triplet = (a_share, b_share, c_share)
-        # reserve triplet in triplet_dict
-        self.triplet_dict[op_id] = triplet
-        return get_share(triplet, index)
 
+        a_shares = share_secret(a, len(self.participant_ids))
+        b_shares = share_secret(b, len(self.participant_ids))
+        c_shares = share_secret(c, len(self.participant_ids))
+        
 
+        self.triplets[op_id] = (a_shares, b_shares, c_shares)
+        
+        return a_shares[idx], b_shares[idx], c_shares[idx]
+    
     # Feel free to add as many methods as you want.
