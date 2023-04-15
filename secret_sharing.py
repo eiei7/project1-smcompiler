@@ -12,59 +12,84 @@ class Share:
     """
     A secret share in a finite field.
     """
+    F_p = 3525673
 
-    # Integers modulo a prime p
-    F_P = 3525673
-
-    def __init__(self, val, *args, **kwargs):
+    def __init__(self, val:int, *args, **kwargs):
         # Adapt constructor arguments as you wish
-        self.val = val % self.F_P
+        self.val = val % self.F_p
 
     def __repr__(self):
         # Helps with debugging.
-        return f"Share - {self.val}"
+        return f"Share - {self.val}, {self.F_p}"
 
     def __add__(self, other):
-        if not isinstance(other, Share):
-            raise TypeError("Only add for Share")
-        return Share((self.val + other.val) % self.F_P)
+        if isinstance(other, Share):
+            if self.F_p != other.F_p:
+
+                raise ValueError("Shares must have the same finite field.")
+            
+            return Share((self.val + other.val) % self.F_p)
+        else:
+            raise TypeError("Only add for Share object")
+
 
     def __sub__(self, other):
-        if not isinstance(other, Share):
-            raise TypeError("Only sub for Share")
-        return Share((self.val - other.val) % self.F_P)
+        if isinstance(other, Share):
+            if self.F_p != other.F_p:
+
+                raise ValueError("Shares must have the same finite field.")
+            
+            return Share((self.val - other.val) % self.F_p)
+        else:
+            raise TypeError("Only sub for Share object")
+
 
     def __mul__(self, other):
-        if not isinstance(other, Share):
+        if isinstance(other, Share):
+            if self.F_p != other.F_p:
+
+                raise ValueError("Shares must have the same finite field.")
+            
+            return Share((self.val * other.val) % self.F_p)
+        else:
             raise TypeError("Only multiply for Share")
-        return Share((self.val * other.val) % self.F_P)
+
 
     def serialize(self):
         """Generate a representation suitable for passing in a message."""
+        
         return str(self.val)
 
     @staticmethod
     def deserialize(serialized) -> Share:
         """Restore object from its serialized representation."""
+
         return Share(int(serialized))
 
 
 def share_secret(secret: int, num_shares: int) -> List[Share]:
     """Generate secret shares."""
-    F_P = Share.F_P
+    
+    if secret >= Share.F_p:
+        raise ValueError("Secrect must be less than the finite field.")
+    
     # generate (n-1) shares
-    shares_value = random.sample(range(0, F_P), num_shares - 1)
+    shares = [Share(random.randint(0, Share.F_p)) for _ in range(num_shares - 1)] 
+    
     # generate the share for the first party in participant_ids list
-    share_0 = secret - (sum(shares_value) % F_P)
-    # generate the list of shares for secret
-    shares_value = [share_0] + shares_value
+    share_0 = Share(secret - (sum([share.val for share in shares]) % Share.F_p))
 
-    return [Share(i) for i in shares_value]
+    return [share_0] + shares
 
 
 def reconstruct_secret(shares: List[Share]) -> int:
     """Reconstruct the secret from shares."""
-    return sum(shares, start=Share(0)).val
+
+    if any([share.F_p != shares[0].F_p for share in shares]):
+
+        raise ValueError("All shares must have same finite field inorder to reconstruct secret.")
+
+    return sum([share.val for share in shares]) % (shares[0].F_p)
 
 
 # Feel free to add as many methods as you want.
